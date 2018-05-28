@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Vue.js2.0之购物车练习</title>
+		<link rel="stylesheet" type="text/css" href="css/index.css"/>
+	</head>
+	<body>
+		<div id="app" v-cloak>
+			<template v-if="list.length">
+				<table>
+					<thead>
+						<tr>
+							<th></th>
+							<th>商品名称</th>
+							<th>商品单价</th>
+							<th>购买数量</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="(item,index) in list">
+							<td>{{index+1}}</td>
+							<td>{{item.name}}</td>
+							<td>{{item.price}}</td>
+							<td>
+								<button @click="handleReduce(index)" :disabled="item.count===1">-</button>
+								{{item.count}}
+								<button @click="handleAdd(index)">+</button>
+							</td>
+							<td>
+								<button @click="handleRemove(index)">移除</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+					总价:￥{{totalPrice}}
+				</div>
+			</template>
+			<div v-else>购物车为空</div>
+		</div>
+		<script src="https://cdn.bootcss.com/vue/2.5.12/vue.min.js"></script>
+		<script type="text/javascript">
+			var app=new Vue({
+				el:"#app",
+				data:{
+					list:[
+						{
+							id:1,
+							name:"inphone7",
+							price:6188,
+							count:1
+						},
+						{
+							id:2,
+							name:"oppo",
+							price:3699,
+							count:9
+						},
+						{
+							id:3,
+							name:"华为",
+							price:9999,
+							count:3
+						}
+					]
+				},
+				computed:{//计算属性
+					totalPrice:function(){
+						var total=0;
+						for(var i=0;i<this.list.length;i++){
+							var item=this.list[i];
+							total+=item.price*item.count;
+						}
+						return total.toString();
+					}
+				},
+				methods:{
+					handleReduce(index){//减少
+						if(this.list[index].count===1){
+							return;
+						}
+						this.list[index].count--;
+					},
+					handleAdd(index){//增加
+						this.list[index].count++;
+					},
+					handleRemove(index){//移除
+						this.list.splice(index,1);
+					}
+				}
+			});
+		</script>
+	</body>
+</html>
